@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+
+        <!-- Blog Entries Column -->
+        <div class="col-md-8 mt-3 left">
+            <div class="card mb-4">
+                <div class="card-header text-center">
+                    <h2 class="card-title">Welcome, {{ user.username }}</h2>
+                    <hr>
+                    <img src="{{ user.profile.image.url }}" alt="" class="rounded-circle account-img" style="width: 30%;height: auto">
+                </div>
+                <div class="card-body text-center">
+                    <h4 class="card-title">Email: </h4>
+                    <p class="card-text"> {{ user.email }} </p>
+
+                </div>
+            </div>
+        </div>
+        {% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
+    </div>
+</div>
+{%endblock%}

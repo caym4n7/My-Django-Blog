@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Blog Entries Column -->
+        <div class="col-md-8 mt-3 left">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="content-section">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                <legend class="text-danger h4 text-center">Delete post</legend>
+                                <hr>
+                                <h2>Are you sure you want to delete the post "{{ post.title }}"</h2>
+                            </fieldset>
+                            <div class="form-group">
+                                <button class="btn btn-outline-danger" type="submit" >Yes, delete</button>
+                                <a class="btn btn-outline-secondary" href="{% url 'post_detail' post.slug %}">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
+    </div>
+</div>
+{% endblock content %}
+

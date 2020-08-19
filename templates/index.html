@@ -1,0 +1,42 @@
+{% extends "base.html" %} 
+{% block content %}
+
+<div class="container">
+    <div class="row">
+
+        <!-- Blog Entries Column -->
+        <div class="col-md-8 mt-3 left">
+            {% for post in post_list %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title"><a class="article-title" href="{% url 'post_detail' post.slug  %}">{{ post.title }}</a></h2>
+                    <p class="card-text text-muted h6"><img class="rounded-circle article-img mr-2" src="{{ post.author.profile.image.url }}" style="width: 4%;">   Author: {{ post.author }} | Posted on: {{ post.created_on|date:"F d, Y" }} | Category: <a class="category-link text-muted h6" href="{% url 'post_by_category' post.category.slug %}">{{ post.category.name }}</a></p>
+                    <hr>
+                    {% if post.post_image %}
+                        <img class="post-image" src="{{ post.post_image.url }}">
+                        <hr>
+                    {% endif %}
+                    <p class="card-text article-description">{{ post.description|default:""|safe }}</p>
+                    <a href="{% url 'post_detail' post.slug  %}" class="btn btn-danger">Read More</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
+    </div>
+</div>
+{% if is_paginated %}
+  <nav aria-label="Page navigation conatiner"></nav>
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+    <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link text-danger">&laquo; PREV PAGE </a></li>
+    {% endif %}
+    {% if page_obj.has_next %}
+    <li><a href="?page={{ page_obj.next_page_number }}" class="page-link text-danger"> NEXT PAGE &raquo;</a></li>
+
+    {% endif %}
+  </ul>
+  </nav>
+</div>
+{% endif %}
+{%endblock%}
