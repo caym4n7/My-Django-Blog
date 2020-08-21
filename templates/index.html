@@ -10,7 +10,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <h2 class="card-title"><a class="article-title" href="{% url 'post_detail' post.slug  %}">{{ post.title }}</a></h2>
-                    <p class="card-text text-muted h6"><img class="rounded-circle article-img mr-2" src="{{ post.author.profile.image.url }}" style="width: 4%;">   Author: {{ post.author }} | Posted on: {{ post.created_on|date:"F d, Y" }} | Category: <a class="category-link text-muted h6" href="{% url 'post_by_category' post.category.slug %}">{{ post.category.name }}</a></p>
+                    <p class="card-text text-muted h6"><img class="rounded-circle article-img mr-2" src="{{ post.author.profile.image.url }}" style="width: 35px;height: 35px;vertical-align: middle;">   Author: {{ post.author }} | Posted on: {{ post.created_on|date:"F d, Y" }} | Category: <a class="category-link text-muted h6" href="{% url 'post_by_category' post.category.slug %}">{{ post.category.name }}</a></p>
                     <hr>
                     {% if post.post_image %}
                         <img class="post-image" src="{{ post.post_image.url }}">
