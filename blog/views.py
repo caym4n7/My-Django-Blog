@@ -1,7 +1,7 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Post, Category
+from .models import Post, Category, Like
 from .forms import CommentForm, PostForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django_summernote.fields import SummernoteTextFormField, SummernoteTextField
@@ -42,6 +42,30 @@ def post_detail(request, slug):
                                            'comments': comments,
                                            'new_comment': new_comment,
                                            'comment_form': comment_form})
+
+
+def like_post(request):
+    user = request.user
+    if request.method == "POST":
+        post_id = request.POST.get('post_id')
+        post_slug = request.POST.get('post_slug')
+        post_obj = Post.objects.get(id=post_id)
+
+        if user in post_obj.liked.all():
+            post_obj.liked.remove(user)
+        else:
+            post_obj.liked.add(user)
+
+        like, created = Like.objects.get_or_create(user=user, post_id=post_id)
+
+        if not created:
+            if like.value == 'Like':
+                like.value = 'Unlike'
+            else:
+                like.value = 'Like'
+
+        like.save()
+    return redirect('post_detail', slug=post_slug)
 
     
 class PostCreateView(LoginRequiredMixin, CreateView):

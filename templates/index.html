@@ -18,6 +18,7 @@
                     {% endif %}
                     <p class="card-text article-description">{{ post.description|default:""|safe }}</p>
                     <a href="{% url 'post_detail' post.slug  %}" class="btn btn-danger">Read More</a>
+
                 </div>
             </div>
             {% endfor %}
