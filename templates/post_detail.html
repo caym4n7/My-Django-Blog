@@ -22,16 +22,24 @@
         <p class="card-text ">{{ post.content | safe }}</p>
 <!--         like button -->
         {% if user.is_authenticated %}
-        <form action="{% url 'like-post' %}" method="POST">
+        <form action="{% url 'like-post' %}" method="POST" class="like-form" id='{{ post.id }}'>
           {% csrf_token %} 
           <input type="hidden" name="post_id" value="{{ post.id }}">
           <input type="hidden" name="post_slug" value="{{ post.slug}}">
-          {% if user not in post.liked.all %}
-            <button class="btn btn-success mr-2" type="submit">Like</button>
-          {% else %}
-            <button class="btn btn-danger mr-2" type="submit">Unlike</button>
-          {% endif %}
-          <strong>{{ post.liked.all.count }} likes</strong>
+          <div class="row">
+            <div class="">
+              <button class="btn btn-outline-danger mr-2 like-btn{{ post.id }}" type="submit">
+              {% if user not in post.liked.all %}
+                Like
+              {% else %}
+                Unlike
+              {% endif %}
+            </button>
+            </div>
+            <div class="">
+              <div class="like-count{{ post.id }}">{{ post.liked.all.count }}</div> likes
+            </div>
+          </div>
         </form>
         {% endif %}
       </div>
@@ -87,3 +95,49 @@
 </div>
 
 {% endblock content %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('.like-form').submit(function(e) {
+        e.preventDefault()
+        
+        const post_id = $(this).attr('id')
+
+        const likeText = $(`.like-btn${post_id}`).text()
+        const trim = $.trim(likeText)
+        
+        const url = $(this).attr('action')
+
+        let res;
+        const likes = $(`.like-count${post_id}`).text()
+        const trimCount = parseInt(likes)
+        
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: {
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+            'post_id':post_id,
+          },
+          success: function(response) {
+            if(trim == "Unlike") {
+              $(`.like-btn${post_id}`).text('Like')
+              res = trimCount - 1
+            } else {
+              $(`.like-btn${post_id}`).text('Unlike')
+              res = trimCount + 1
+            }
+
+            $(`.like-count${post_id}`).text(res)
+          },
+          error: function(response) {
+            console.log('error', response)
+          }
+        })
+
+      })
+    });
+
+  </script>
+{% endblock scripts %}

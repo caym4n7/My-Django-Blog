@@ -1,10 +1,12 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
 from .models import Post, Category, Like
 from .forms import CommentForm, PostForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django_summernote.fields import SummernoteTextFormField, SummernoteTextField
+from django.http import JsonResponse
 
 
 
@@ -18,7 +20,11 @@ class PostListView(ListView):
         query = self.request.GET.get('q')
 
         if query:
-            object_list = self.model.objects.filter(title__iexact=query)
+            object_list = self.model.objects.filter(
+            Q(title__iexact=query)|
+            Q(title__icontains=query)|
+            Q(content__icontains=query)
+            )
         else:
             object_list = self.model.objects.filter(status=1).order_by('-created_on')
         return object_list
@@ -74,7 +80,14 @@ def like_post(request):
             else:
                 like.value = 'Like'
 
-        like.save()
+            post_obj.save()
+            like.save()
+
+        data = {
+            'value': like.value,
+            'likes': post_obj.liked.all().count()
+        }
+        return JsonResponse(data, safe=False)
     return redirect('post_detail', slug=post_slug)
 
     
