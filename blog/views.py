@@ -9,9 +9,19 @@ from django_summernote.fields import SummernoteTextFormField, SummernoteTextFiel
 
 
 class PostListView(ListView):
+    model = Post
     queryset = Post.objects.filter(status=1).order_by('-created_on')
     template_name = 'index.html'
     paginate_by = 3
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+
+        if query:
+            object_list = self.model.objects.filter(title__iexact=query)
+        else:
+            object_list = self.model.objects.filter(status=1).order_by('-created_on')
+        return object_list
 
 
 # class PostDetailView(DetailView):
