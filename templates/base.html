@@ -50,7 +50,7 @@
                             <a class="btn btn-outline-danger font-weight-bold" href="{% url 'post-create' %}">Add post</a>
                         </li>
                         <li class="nav-item text-black ml-3">
-                            <a class="btn btn-outline-danger font-weight-bold" href="{% url 'profile' %}">Profile</a>
+                            <a class="btn btn-outline-danger font-weight-bold" href="{% url 'profile' user.profile.slug %}">Profile</a>
                         </li>
                         <li class="nav-item text-black ml-3">
                             <a class="btn btn-outline-danger font-weight-bold" href="{% url 'logout' %}">Logout</a>

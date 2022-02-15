@@ -5,14 +5,18 @@
 
 <!-- Sidebar Widgets Column -->
 <div class="col-md-4 float-right ">
+  
   <div class="card my-4">
-    <h5 class="card-header text-center">Sidebar</h5>
+    <h5 class="card-header text-center">Categories</h5>
     <div class="card">
       <div class="card-body">
-		<p class="card-text text-center">There's no announcements yet :(</p>
+        {% for category in categories_list %}
+		    <p class="card-text text-center"><a href="{% url 'post_by_category' category.slug %}" class="category-link text-muted font-weight-bold">{{category}}</a></p>
+        {% endfor %}
       </div>
     </div>
   </div>
+
 </div>
 
 

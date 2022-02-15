@@ -1,14 +1,14 @@
 from .models import Comment, Post
-from django import forms
+from django.forms import ModelForm, Form
 from django_summernote.fields import SummernoteTextFormField, SummernoteTextField
 
-class CommentForm(forms.ModelForm):
+class CommentForm(ModelForm):
 	class Meta:
 		model = Comment
 		fields = ('content',)
 
 
-class PostForm(forms.ModelForm):
+class PostForm(ModelForm):
 	content = SummernoteTextFormField()
 	description = SummernoteTextField()
 	class Meta:

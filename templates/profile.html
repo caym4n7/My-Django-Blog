@@ -11,25 +11,26 @@
         <div class="col-md-8 mt-3 left">
             <div class="card mb-4">
                 <div class="card-header text-center">
-                    <h2 class="card-title">Welcome, {{ user.username }}</h2>
+                    {% if profile.user == user %}
+                    <h2 class="card-title">Welcome, {{ profile.user.username }}</h2>
                     <hr>
-                    <img src="{{ user.profile.image.url }}" alt="" class="rounded-circle account-img mb-2" style="width: 30%; height: 180px; object-fit: cover;">
-                    <h2 class="card-text">{{ user.username }}</h2>
-                    <p class="card-text text-muted">{{ user.email }}</p>
+                    {% endif %}
+                    <img src="{{ profile.user.profile.image.url }}" alt="" class="rounded-circle account-img mb-2" style="max-width: 30%; height: 180px; object-fit: cover;">
+                    <h2 class="card-text">{{ profile.user.username }}</h2>
+                    <p class="card-text text-muted">{{ profile.user.email }}</p>
+                </div>
+                {% if profile.user == user %}
+                <div class="card-body text-center">
+                    <a href="{% url 'profile_update' %}" class="btn btn-success btn-sm">Update</a>
+                </div>
+                {% endif %}
+            </div>
+            <div class="card mb-4">
+                <div class="card-header text-center">
+                    <h2 class="card-title">About, {{ profile.user.username }}</h2>
                 </div>
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <fieldset class="form-group">
-                                <legend class="text-danger h4 text-center">Profile Update</legend>
-                                <hr>
-                                {{ u_form|crispy }}
-                                {{ p_form|crispy }}
-                            </fieldset>
-                            <div class="form-group">
-                                <button class="btn btn-outline-danger" type="submit" >Update</button>
-                            </div>
-                        </form>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores, atque! Velit nam cumque enim! Adipisci quidem repellendus excepturi quibusdam! Enim cum assumenda id reprehenderit vitae, ratione repellendus blanditiis? Modi, vero.</p>
                 </div>
             </div>
         </div>

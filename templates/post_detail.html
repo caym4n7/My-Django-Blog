@@ -19,7 +19,8 @@
           <img class="post-image" src="{{ post.post_image.url }}">
           <hr>
         {% endif %}
-        <p class="card-text ">{{ post.content | safe }}</p>
+
+        {{ post.content|safe }}
 <!--         like button -->
         {% if user.is_authenticated %}
         <form action="{% url 'like-post' %}" method="POST" class="like-form" id='{{ post.id }}'>
@@ -46,33 +47,6 @@
     </div>
     {% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
 
-    <div class="col-md-8 card mb-4  mt-3 ">
-      <div class="card-body">
-        <!-- comments -->
-        {% with comments.count as total_comments %}
-        <h4 class="">{{ total_comments }} Comments</h4>
-        <hr>
-
-        <p>
-          {% endwith %} {% for comment in comments %}
-        </p>
-
-        <div class="comments" style="padding: 10px;">
-          <p class="font-weight-bold">
-            Username: {{ comment.author }} 
-            <br>
-            <span class=" text-muted font-weight-normal">
-              Created on: {{ comment.created_on|date:"F d, Y" }}
-            </span>
-          </p>
-          {{ comment.content | linebreaks }}
-        </div>
-        <hr>
-
-        {% endfor %}
-      </div>
-    </div>
-
     {% if user.is_authenticated %}
     <div class="col-md-8 card mb-4  mt-3 ">
       <div class="card-body">
@@ -91,6 +65,35 @@
       </div>
     </div>
     {% endif %}
+
+    <div class="col-md-8 card mb-4  mt-3 ">
+      <div class="card-body">
+        <!-- comments -->
+        {% with comments.count as total_comments %}
+        <h4 class="">{{ total_comments }} Comments</h4>
+        <hr>
+
+        <p>
+          {% endwith %} {% for comment in comments %}
+        </p>
+
+        <div class="comments" style="padding: 10px;">
+          <p class="font-weight-bold">
+            by: {{ comment.author }} 
+            <br>
+            <span class=" text-muted font-weight-normal">
+              Created on: {{ comment.created_on|date:"F d, Y" }}
+            </span>
+          </p>
+          {{ comment.content | linebreaks }}
+        </div>
+        <hr>
+
+        {% endfor %}
+      </div>
+    </div>
+
+
   </div>
 </div>
 

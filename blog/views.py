@@ -16,28 +16,29 @@ class PostListView(ListView):
     template_name = 'index.html'
     paginate_by = 3
 
-    def get_queryset(self):
-        query = self.request.GET.get('q')
+    # def get_queryset(self):
+    #     query = self.request.GET.get('s')
 
-        if query:
-            object_list = self.model.objects.filter(
-            Q(title__iexact=query)|
-            Q(title__icontains=query)|
-            Q(content__icontains=query)
-            )
-        else:
-            object_list = self.model.objects.filter(status=1).order_by('-created_on')
-        return object_list
+    #     if query:
+    #         queryset = self.model.objects.filter(
+    #         Q(title__iexact=query)|
+    #         Q(content__iexact=query)
+    #         )
+    #     else:
+    #         queryset = self.model.objects.filter(status=1).order_by('-created_on')
+        
+    #     return queryset
 
-
-# class PostDetailView(DetailView):
-#     model = Post
-#     template_name = 'post_detail.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories_list'] = Category.objects.all()
+        return context
 
 def post_detail(request, slug):
     template_name = 'post_detail.html'
     post = get_object_or_404(Post, slug=slug)
     comments = post.comments.filter(active=True)
+    categories_list = Category.objects.all()
     new_comment = None
     # Comment posted
     if request.method == 'POST':
@@ -57,7 +58,9 @@ def post_detail(request, slug):
     return render(request, template_name, {'post': post,
                                            'comments': comments,
                                            'new_comment': new_comment,
-                                           'comment_form': comment_form})
+                                           'comment_form': comment_form,
+                                           'categories_list': categories_list
+                                           })
 
 
 def like_post(request):
@@ -137,6 +140,7 @@ class PostCategory(ListView):
     def get_context_data(self, **kwargs):
         context = super(PostCategory, self).get_context_data(**kwargs)
         context['category'] = self.category
+        context['categories_list'] = Category.objects.all()
         return context
 
 def about(request):

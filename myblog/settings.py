@@ -149,6 +149,7 @@ LOGIN_URL = 'login'
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'      # Summernote editor
 SUMMERNOTE_THEME = 'bs4'            # Summernote editor
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4' # Crispy forms
 
